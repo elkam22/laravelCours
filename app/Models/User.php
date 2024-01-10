@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'avatar',
         'password',
     ];
 
@@ -42,4 +43,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // protected function password(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn (string $value) => decrypt($value),
+    //         set: fn (string $value) => bcrypt($value),
+    //     );
+    // }
 }
