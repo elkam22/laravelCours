@@ -51,4 +51,6 @@ class User extends Authenticatable
     //         set: fn (string $value) => bcrypt($value),
     //     );
     // }
+
+
 }

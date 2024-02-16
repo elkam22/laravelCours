@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AvatarController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 
 /*
@@ -97,3 +99,29 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// login with github
+Route::post('/auth/redirect', function () {
+    return Socialite::driver('github')->redirect();
+})->name('login.github');
+
+Route::get('/auth/callback', function () {
+    $user = Socialite::driver('github')->user();
+
+    $user = User::updateOrCreate(['email' => $user['email'],],[
+        'name' => 'El kamraoui',
+        'password' => 'password',
+    ]);
+
+    Auth::login($user);
+
+    return redirect('/dashboard');
+    // dd($user);
+    // $user->token
+});
+
+// help ticket project routers
+Route::middleware('auth')->group(function () {
+    Route::resource('/ticket', TicketController::class);
+});
+
