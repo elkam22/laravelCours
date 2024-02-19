@@ -9,16 +9,39 @@
                     <a href="{{ '/storage/' . $ticket->attachement }}" target="_blank">Attachement</a>
                 @endif
             </div>
-            <div class="flex">
-                <x-primary-button>
-                    <a href="{{ route('ticket.edit', $ticket) }}">Edit</a>
-                </x-primary-button>
-                <form class="ml-2" action="{{ route('ticket.destroy', $ticket->id) }}" method="post">
-                    @method('delete')
-                    @csrf
+            <div class="flex justify-between">
+                <div class="flex">
+                    <x-primary-button>
+                        <a href="{{ route('ticket.edit', $ticket) }}">Edit</a>
+                    </x-primary-button>
+                    <form class="ml-2" action="{{ route('ticket.destroy', $ticket->id) }}" method="post">
+                        @method('delete')
+                        @csrf
 
-                    <x-primary-button>Delete</x-primary-button>
-                </form>
+                        <x-primary-button>Delete</x-primary-button>
+                    </form>
+                </div>
+                @if(auth()->user()->isAdmin)
+                    <div class="flex">
+                        <form action="{{ route('ticket.update', $ticket) }}" method="post">
+                            @csrf
+                            @method('patch')
+
+                            <input type="hidden" name="status" value="resolved">
+                            <x-primary-button>Resolv</x-primary-button>
+                        </form>
+                        <form action="{{ route('ticket.update', $ticket) }}" method="post">
+                            @csrf
+                            @method('patch')
+
+                            <input type="hidden" name="status" value="rejected">
+                            <x-primary-button class="ml-2">Reject</x-primary-button>
+                        </form>
+
+                    </div>
+                @else
+                    <p>Status is : {{ $ticket->status }}</p>
+                @endif
             </div>
         </div>
     </div>
